@@ -1,0 +1,27 @@
+{
+  "flight_number": "GB451",
+  "origin": "MRA",
+  "destination": "IST",
+  "departure_time": "2026-10-15T14:25:00+02:00",
+  "aircraft_registration": "5A-GBR",
+  "documents": [
+    {
+      "document_type": "ground_handling_confirmation",
+      "present": true,
+      "flight_number": "GB451",
+      "departure_time": "2026-10-15T14:45:00+02:00",
+      "aircraft_registration": "5A-GBR"
+    },
+    {
+      "document_type": "fuel_confirmation",
+      "present": true,
+      "flight_number": "GB451",
+      "aircraft_registration": "5A-GBR"
+    },
+    {
+      "document_type": "catering_confirmation",
+      "present": false
+    }
+  ],
+  "research_query": "Istanbul Airport current operational notices for airline ground operations"
+}
