@@ -1,0 +1,17 @@
+{
+  "flight_number": "GB451",
+  "origin": "MRA",
+  "destination": "IST",
+  "departure_time": "2026-10-15T14:25:00+02:00",
+  "aircraft_registration": "5A-GBR",
+  "profile": {
+    "required_documents": ["operational_flight_plan", "ground_handling_confirmation", "load_or_mass_balance", "fuel_confirmation"],
+    "required_services": ["fuel", "catering"]
+  },
+  "documents": [
+    {"document_type": "operational_flight_plan", "flight_number": "GB451", "origin": "MRA", "destination": "IST", "departure_time": "2026-10-15T14:25:00+02:00", "aircraft_registration": "5A-GBR", "source_ref": "OFP.pdf p1"},
+    {"document_type": "ground_handling_confirmation", "flight_number": "GB451", "origin": "MRA", "destination": "IST", "departure_time": "2026-10-15T14:25:00+02:00", "aircraft_registration": "5A-GBR", "source_ref": "HandlingConfirmation.pdf p1"},
+    {"document_type": "load_or_mass_balance", "flight_number": "GB451", "aircraft_registration": "5A-GBR", "source_ref": "Loadsheet.pdf p1"},
+    {"document_type": "fuel_confirmation", "flight_number": "GB451", "aircraft_registration": "5A-GBR", "service": "fuel", "confirmed": true, "source_ref": "FuelConfirmation.pdf p1"}
+  ]
+}

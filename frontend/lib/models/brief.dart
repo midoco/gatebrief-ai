@@ -3,14 +3,45 @@ class Finding {
   final String code;
   final String message;
   final String source;
+  final String? documentType;
+  final String? expectedValue;
+  final String? foundValue;
+  final String? evidenceRef;
 
-  Finding({required this.severity, required this.code, required this.message, required this.source});
+  Finding({
+    required this.severity,
+    required this.code,
+    required this.message,
+    required this.source,
+    this.documentType,
+    this.expectedValue,
+    this.foundValue,
+    this.evidenceRef,
+  });
 
   factory Finding.fromJson(Map<String, dynamic> json) => Finding(
         severity: json['severity'] ?? 'info',
         code: json['code'] ?? '',
         message: json['message'] ?? '',
         source: json['source'] ?? 'rules',
+        documentType: json['document_type'],
+        expectedValue: json['expected_value'],
+        foundValue: json['found_value'],
+        evidenceRef: json['evidence_ref'],
+      );
+}
+
+class ScenarioOption {
+  final String id;
+  final String label;
+  final String description;
+
+  ScenarioOption({required this.id, required this.label, required this.description});
+
+  factory ScenarioOption.fromJson(Map<String, dynamic> json) => ScenarioOption(
+        id: json['id'] ?? '',
+        label: json['label'] ?? '',
+        description: json['description'] ?? '',
       );
 }
 
@@ -22,6 +53,7 @@ class ReadinessBrief {
   final String? modelUsed;
   final List<Finding> findings;
   final List<String> recommendedActions;
+  final List<String> externalChecksRequested;
 
   ReadinessBrief({
     required this.flightNumber,
@@ -30,6 +62,7 @@ class ReadinessBrief {
     required this.disclaimer,
     required this.findings,
     required this.recommendedActions,
+    required this.externalChecksRequested,
     this.modelUsed,
   });
 
@@ -43,5 +76,7 @@ class ReadinessBrief {
             .map((e) => Finding.fromJson(Map<String, dynamic>.from(e)))
             .toList(),
         recommendedActions: (json['recommended_actions'] as List? ?? []).map((e) => e.toString()).toList(),
+        externalChecksRequested:
+            (json['external_checks_requested'] as List? ?? []).map((e) => e.toString()).toList(),
       );
 }

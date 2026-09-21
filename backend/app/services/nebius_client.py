@@ -54,8 +54,10 @@ class NebiusService:
                         "You are GateBrief AI, an aviation operations decision-support assistant. "
                         "Never claim to authorize, clear, dispatch, or certify a flight. "
                         "Use only the supplied case, deterministic findings, and supplied research sources. "
+                        "Treat exact deterministic comparisons as authoritative findings. "
+                        "If an external check is requested but no research source is supplied, state that it remains pending. "
                         "Return strict JSON with keys summary (string) and recommended_actions (array of strings). "
-                        "Be concise and explicitly flag conflicts and missing data."
+                        "Be concise, preserve evidence traceability, and explicitly flag conflicts and missing data."
                     ),
                 },
                 {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
@@ -74,16 +76,30 @@ class NebiusService:
     @staticmethod
     def _fallback(findings: list[Finding]) -> str:
         problems = [f for f in findings if f.severity in {"warning", "critical"}]
-        if not problems:
-            return "Demo rules found no blocking inconsistencies. Human review is still required."
-        return f"GateBrief detected {len(problems)} item(s) requiring human attention."
+        pending_external = [f for f in findings if f.code == "EXTERNAL_CHECK_REQUIRED"]
+        if problems:
+            return f"GateBrief detected {len(problems)} item(s) requiring human attention."
+        if pending_external:
+            return (
+                f"Internal deterministic checks are clear; {len(pending_external)} fresh external check(s) "
+                "remain pending before human review."
+            )
+        return "Deterministic checks found no blocking inconsistencies. Human review is still required."
 
     @staticmethod
     def _fallback_actions(findings: list[Finding]) -> list[str]:
-        actions = []
+        actions: list[str] = []
         for item in findings:
             if item.code == "MISSING_DOCUMENT":
                 actions.append("Obtain or verify the missing document before closing the flight folder.")
+            elif item.code == "MISSING_SERVICE_CONFIRMATION":
+                actions.append("Confirm the required operational service or record an approved exception.")
+            elif item.code == "STALE_DOCUMENT_REVISION":
+                actions.append("Replace the stale document with the latest approved revision and re-run checks.")
+            elif item.code == "DUPLICATE_DOCUMENT_CONFLICT":
+                actions.append("Resolve duplicate conflicting documents against the authoritative operational record.")
             elif item.code.endswith("MISMATCH"):
                 actions.append("Resolve the conflicting flight data against the authoritative operational record.")
+            elif item.code == "EXTERNAL_CHECK_REQUIRED":
+                actions.append("Obtain fresh external evidence for the requested operational context before final review.")
         return list(dict.fromkeys(actions)) or ["Perform authorized human review of the flight folder."]
